@@ -1,0 +1,6 @@
+config BR2_PACKAGE_RLITE
+        bool "rlite"
+        help
+          A light RINA implementation
+
+          https://github.com/vmaffione/rlite

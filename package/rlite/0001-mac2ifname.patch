@@ -1,0 +1,124 @@
+diff --git a/user/tools/CMakeLists.txt b/user/tools/CMakeLists.txt
+index 0d994e3..90e855f 100644
+--- a/user/tools/CMakeLists.txt
++++ b/user/tools/CMakeLists.txt
+@@ -3,6 +3,7 @@ add_executable(rinaperf rinaperf.c)
+ add_executable(rina-rr-tool-bin rina-rr-tool.c)
+ add_executable(rlite-ctl rlite-ctl.c)
+ add_executable(rina-gw rina-gw.cpp)
++add_executable(mac2ifname mac2ifname.c)
+ 
+ target_link_libraries(rinaperf rlite)
+ target_link_libraries(rina-rr-tool-bin rlite)
+@@ -10,6 +11,6 @@ target_link_libraries(rlite-ctl rlite rlite-conf)
+ target_link_libraries(rina-gw rlite rlite-evloop ${CMAKE_THREAD_LIBS_INIT})
+ 
+  # Installation directives
+-install(TARGETS rinaperf rlite-ctl rina-gw rina-rr-tool-bin DESTINATION usr/bin)
++install(TARGETS rinaperf rlite-ctl rina-gw rina-rr-tool-bin mac2ifname DESTINATION usr/bin)
+ install(FILES rina-gw.conf DESTINATION etc/rlite)
+ install(PROGRAMS inet-rr-tool rina-rr-tool rina-rr-tool-raw DESTINATION usr/bin)
+diff --git a/user/tools/mac2ifname.c b/user/tools/mac2ifname.c
+new file mode 100644
+index 0000000..de62502
+--- /dev/null
++++ b/user/tools/mac2ifname.c
+@@ -0,0 +1,98 @@
++#include <arpa/inet.h>
++#include <sys/socket.h>
++#include <netdb.h>
++#include <ifaddrs.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <linux/if_link.h>
++#include <net/if.h>
++#include <string.h>
++
++
++static int
++get_mac_by_ifname(const char *ifname, uint8_t *hwaddr)
++{
++    struct ifreq ifr;
++    int sock;
++
++    if ((NULL == ifname) || (NULL == hwaddr)) {
++        return -1;
++    }
++
++    sock = socket(AF_INET, SOCK_STREAM, 0);
++    if (sock < 0) {
++        return -1;
++    }
++
++    strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name) - 1);
++    ifr.ifr_name[sizeof(ifr.ifr_name) - 1] = '\0';
++
++    if (ioctl(sock, SIOCGIFHWADDR, &ifr) == -1) {
++        perror("ioctl(SIOCGIFHWADDR)");
++        return -1;
++    }
++
++    memcpy(hwaddr, ifr.ifr_ifru.ifru_hwaddr.sa_data, IFHWADDRLEN);
++
++    close(sock);
++
++    return 0;
++}
++
++int main(int argc, char *argv[])
++{
++    struct ifaddrs *ifaddr, *ifa;
++    int family, s, n;
++    char host[NI_MAXHOST];
++    uint8_t mac_addr_one[6];
++    uint8_t mac_addr_two[6];
++
++    if (argc < 2) {
++        printf("    usage: mac2ifname MAC_ADDRESS\n");
++        return -1;
++    }
++
++    n = sscanf(argv[1], "%x:%x:%x:%x:%x:%x",
++                &mac_addr_one[0],
++                &mac_addr_one[1],
++                &mac_addr_one[2],
++                &mac_addr_one[3],
++                &mac_addr_one[4],
++                &mac_addr_one[5]);
++    if (n != 6) {
++        printf("    invalid MAC address %s\n", argv[1]);
++        return -1;
++    }
++
++    if (getifaddrs(&ifaddr) == -1) {
++        perror("getifaddrs");
++        exit(EXIT_FAILURE);
++    }
++
++    /* Walk through linked list, maintaining head pointer so we
++       can free list later */
++
++    for (ifa = ifaddr, n = 0; ifa != NULL; ifa = ifa->ifa_next, n++) {
++        if (ifa->ifa_addr == NULL)
++            continue;
++
++        get_mac_by_ifname(ifa->ifa_name, mac_addr_two);
++#if 0
++        printf("%s %02x:%02x:%02x:%02x:%02x:%02x\n", ifa->ifa_name,
++                mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3],
++                mac_addr[4], mac_addr[5]);
++#endif
++        if (memcmp(mac_addr_one, mac_addr_two, sizeof(mac_addr_one)) == 0) {
++            printf("%s\n", ifa->ifa_name);
++            freeifaddrs(ifaddr);
++
++            return 0;
++        }
++    }
++
++    freeifaddrs(ifaddr);
++
++    return -1;
++}
