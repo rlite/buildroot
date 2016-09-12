@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-DROPBEAR_VERSION = 2016.73
-DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
-DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+DROPBEAR_VERSION = master
+DROPBEAR_SITE = https://gitlab.com/rlite/rlite-dropbear.git
+DROPBEAR_SITE_METHOD = git
 DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
 DROPBEAR_LICENSE_FILES = LICENSE
 DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
@@ -79,6 +79,8 @@ else
 DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
 DROPBEAR_DEPENDENCIES += zlib
 endif
+
+DROPBEAR_DEPENDENCIES += rlite
 
 ifneq ($(BR2_PACKAGE_DROPBEAR_WTMP),y)
 DROPBEAR_CONF_OPTS += --disable-wtmp
