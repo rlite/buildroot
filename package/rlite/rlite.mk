@@ -8,7 +8,8 @@ RLITE_SITE = https://github.com/vmaffione/rlite.git
 RLITE_SITE_METHOD = git
 #RLITE_SITE = /home/vmaffione/git/rlite
 #RLITE_SITE_METHOD = local
-RLITE_INSTALL_STAGING = YES  # e.g. useful for patched dropbear
+# e.g. useful for patched dropbear
+RLITE_INSTALL_STAGING = YES
 RLITE_INSTALL_TARGET = YES
 RLITE_LICENSE = GPLv2
 
