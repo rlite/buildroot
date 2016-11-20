@@ -1,5 +1,16 @@
+From 983f07326e093108e7cac0c62ba0494e016e1b19 Mon Sep 17 00:00:00 2001
+From: Vincenzo Maffione <v.maffione@gmail.com>
+Date: Thu, 17 Nov 2016 22:43:29 +0100
+Subject: [PATCH] add mac2ifname tool
+
+---
+ user/tools/CMakeLists.txt |  3 +-
+ user/tools/mac2ifname.c   | 98 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+ create mode 100644 user/tools/mac2ifname.c
+
 diff --git a/user/tools/CMakeLists.txt b/user/tools/CMakeLists.txt
-index 0d994e3..90e855f 100644
+index e209357..846b4cf 100644
 --- a/user/tools/CMakeLists.txt
 +++ b/user/tools/CMakeLists.txt
 @@ -3,6 +3,7 @@ add_executable(rinaperf rinaperf.c)
@@ -17,7 +28,7 @@ index 0d994e3..90e855f 100644
 -install(TARGETS rinaperf rlite-ctl rina-gw rina-rr-tool-bin DESTINATION usr/bin)
 +install(TARGETS rinaperf rlite-ctl rina-gw rina-rr-tool-bin mac2ifname DESTINATION usr/bin)
  install(FILES rina-gw.conf DESTINATION etc/rlite)
- install(PROGRAMS inet-rr-tool rina-rr-tool rina-rr-tool-raw DESTINATION usr/bin)
+ install(PROGRAMS inet-rr-tool rina-rr-tool DESTINATION usr/bin)
 diff --git a/user/tools/mac2ifname.c b/user/tools/mac2ifname.c
 new file mode 100644
 index 0000000..de62502
@@ -122,3 +133,6 @@ index 0000000..de62502
 +
 +    return -1;
 +}
+-- 
+2.10.2
+
