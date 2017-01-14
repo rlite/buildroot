@@ -16,7 +16,7 @@ RLITE_LICENSE = GPLv2
 RLITE_DEPENDENCIES = protobuf
 # For some reason buildroot uses "/usr" as default install prefix,
 # so we have to override it
-RLITE_CONF_OPTS = -DCMAKE_INSTALL_PREFIX="/"
+RLITE_CONF_OPTS = -DCMAKE_INSTALL_PREFIX="/" -DMAC2IFNAME=ON
 
 RLITE_MODULE_SUBDIRS = kernel
 
