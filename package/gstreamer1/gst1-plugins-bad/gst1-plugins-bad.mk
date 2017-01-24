@@ -4,26 +4,20 @@
 #
 ################################################################################
 
-GST1_PLUGINS_BAD_VERSION = 1.8.1
+GST1_PLUGINS_BAD_VERSION = 1.10.2
 GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
-GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
 GST1_PLUGINS_BAD_INSTALL_STAGING = YES
 GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
 # Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
 # enabled.
 GST1_PLUGINS_BAD_LICENSE = LGPLv2+ LGPLv2.1+
 
-GST1_PLUGINS_BAD_AUTORECONF = YES
-GST1_PLUGINS_BAD_AUTORECONF_OPTS = -I $(@D)/common/m4
-GST1_PLUGINS_BAD_GETTEXTIZE = YES
-
 GST1_PLUGINS_BAD_CONF_OPTS = \
 	--disable-examples \
 	--disable-valgrind \
 	--disable-directsound \
-	--disable-wsapi \
 	--disable-direct3d \
-	--disable-direct3d9 \
 	--disable-winks \
 	--disable-android_media \
 	--disable-apple_media \
@@ -39,7 +33,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
 	--disable-voamrwbenc \
 	--disable-bs2b \
 	--disable-chromaprint \
-	--disable-dash \
 	--disable-dc1394 \
 	--disable-dts \
 	--disable-resindvd \
@@ -51,7 +44,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
 	--disable-ladspa \
 	--disable-lv2 \
 	--disable-libde265 \
-	--disable-strp \
 	--disable-linsys \
 	--disable-modplug \
 	--disable-mimic \
@@ -73,11 +65,8 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
 	--disable-vdpau \
 	--disable-schro \
 	--disable-zbar \
-	--disable-rtmp \
 	--disable-spandsp \
-	--disable-gsettings \
 	--disable-sndio \
-	--disable-hls \
 	--disable-gtk3 \
 	--disable-qt
 
@@ -380,12 +369,6 @@ else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-librfb
 endif
 
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER),y)
-GST1_PLUGINS_BAD_CONF_OPTS += --enable-liveadder
-else
-GST1_PLUGINS_BAD_CONF_OPTS += --disable-liveadder
-endif
-
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MIDI),y)
 GST1_PLUGINS_BAD_CONF_OPTS += --enable-midi
 else
@@ -533,6 +516,12 @@ else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-stereo
 endif
 
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TIMECODE),y)
+GST1_PLUGINS_BAD_CONF_OPTS += --enable-timecode
+else
+GST1_PLUGINS_BAD_CONF_OPTS += --disable-timecode
+endif
+
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA),y)
 GST1_PLUGINS_BAD_CONF_OPTS += --enable-tta
 else
@@ -658,6 +647,14 @@ else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-fbdev
 endif
 
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC),y)
+GST1_PLUGINS_BAD_CONF_OPTS += --enable-fdk_aac
+GST1_PLUGINS_BAD_DEPENDENCIES += fdk-aac
+GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
+else
+GST1_PLUGINS_BAD_CONF_OPTS += --disable-fdk_aac
+endif
+
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
 GST1_PLUGINS_BAD_CONF_OPTS += --enable-gl
 else
@@ -666,9 +663,28 @@ endif
 
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS),y)
 GST1_PLUGINS_BAD_CONF_OPTS += --enable-hls
-GST1_PLUGINS_BAD_DEPENDENCIES += gnutls
+
+ifeq ($(BR2_PACKAGE_NETTLE),y)
+GST1_PLUGINS_BAD_DEPENDENCIES += nettle
+GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=nettle
+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+GST1_PLUGINS_BAD_DEPENDENCIES += libgcrypt
+GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=libgcrypt \
+	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+else
+GST1_PLUGINS_BAD_DEPENDENCIES += openssl
+GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=openssl
+endif
+
 else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-hls
+endif
+
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS),y)
+GST1_PLUGINS_BAD_CONF_OPTS += --enable-kms
+GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
+else
+GST1_PLUGINS_BAD_CONF_OPTS += --disable-kms
 endif
 
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS),y)
@@ -770,6 +786,13 @@ else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-sndfile
 endif
 
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP),y)
+GST1_PLUGINS_BAD_CONF_OPTS += --enable-srtp
+GST1_PLUGINS_BAD_DEPENDENCIES += libsrtp
+else
+GST1_PLUGINS_BAD_CONF_OPTS += --disable-srtp
+endif
+
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
 GST1_PLUGINS_BAD_CONF_OPTS += --enable-vcd
 else
@@ -788,6 +811,13 @@ GST1_PLUGINS_BAD_CONF_OPTS += --enable-webp
 GST1_PLUGINS_BAD_DEPENDENCIES += webp
 else
 GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+endif
+
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
+GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
+else
+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
 endif
 
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)

@@ -1,6 +1,6 @@
 ################################################################################
 #
-# glibc/eglibc
+# glibc
 #
 ################################################################################
 
@@ -15,7 +15,7 @@ GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICEN
 # glibc is part of the toolchain so disable the toolchain dependency
 GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
 
-# Before (e)glibc is configured, we must have the first stage
+# Before glibc is configured, we must have the first stage
 # cross-compiler and the kernel headers
 GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
 
@@ -64,7 +64,7 @@ endif
 #  2. We have to execute the configure script with bash and not sh.
 #
 # Note that as mentionned in
-# http://patches.openembedded.org/patch/38849/, eglibc/glibc must be
+# http://patches.openembedded.org/patch/38849/, glibc must be
 # built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
 define GLIBC_CONFIGURE_CMDS
 	mkdir -p $(@D)/build
@@ -103,7 +103,7 @@ endef
 GLIBC_LIBS_LIB = \
 	ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.*        \
 	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
-	libnss_files.so.* libnss_dns.so.*
+	libnss_files.so.* libnss_dns.so.* libmvec.so.*
 
 ifeq ($(BR2_PACKAGE_GDB),y)
 GLIBC_LIBS_LIB += libthread_db.so.*
@@ -136,7 +136,7 @@ endef
 # highly unlikely. The failure mode, if it ever occurs, would be either
 # that a signalling NaN fails to raise an invalid operation exception or
 # (more likely) an ordinary NaN raises an invalid operation exception.
-ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
+ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
 define GLIBC_FIX_MIPS_R6
 	$(SED) 's#10.0.0#4.0.0#' \
 		$(@D)/sysdeps/unix/sysv/linux/mips/configure \

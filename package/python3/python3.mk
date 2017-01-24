@@ -5,7 +5,7 @@
 ################################################################################
 
 PYTHON3_VERSION_MAJOR = 3.5
-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
 PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
 PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
 PYTHON3_LICENSE = Python software foundation license v2, others
@@ -36,13 +36,17 @@ HOST_PYTHON3_CONF_OPTS += 	\
 	--enable-unicodedata	\
 	--disable-test-modules	\
 	--disable-idle3		\
-	--disable-ossaudiodev
+	--disable-ossaudiodev	\
+	--disable-openssl
 
 # Make sure that LD_LIBRARY_PATH overrides -rpath.
 # This is needed because libpython may be installed at the same time that
 # python is called.
+# Make python believe we don't have 'hg', so that it doesn't try to
+# communicate over the network during the build.
 HOST_PYTHON3_CONF_ENV += \
-	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags"
+	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+	ac_cv_prog_HAS_HG=/bin/false
 
 PYTHON3_DEPENDENCIES = host-python3 libffi
 
@@ -100,6 +104,10 @@ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
 PYTHON3_DEPENDENCIES += bzip2
 endif
 
+ifeq ($(BR2_PACKAGE_PYTHON3_XZ),y)
+PYTHON3_DEPENDENCIES += xz
+endif
+
 ifeq ($(BR2_PACKAGE_PYTHON3_ZLIB),y)
 PYTHON3_DEPENDENCIES += zlib
 endif
@@ -110,11 +118,21 @@ else
 PYTHON3_CONF_OPTS += --disable-ossaudiodev
 endif
 
+# Make python believe we don't have 'hg', so that it doesn't try to
+# communicate over the network during the build.
 PYTHON3_CONF_ENV += \
 	ac_cv_have_long_long_format=yes \
 	ac_cv_file__dev_ptmx=yes \
 	ac_cv_file__dev_ptc=yes \
-	ac_cv_working_tzset=yes
+	ac_cv_working_tzset=yes \
+	ac_cv_prog_HAS_HG=/bin/false
+
+# GCC is always compliant with IEEE754
+ifeq ($(BR2_ENDIAN),"LITTLE")
+PYTHON3_CONF_ENV += ac_cv_little_endian_double=yes
+else
+PYTHON3_CONF_ENV += ac_cv_big_endian_double=yes
+endif
 
 # uClibc is known to have a broken wcsftime() implementation, so tell
 # Python 3 to fall back to strftime() instead.
@@ -217,7 +235,7 @@ define PYTHON3_CREATE_PYC_FILES
 endef
 
 ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
-TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
 endif
 
 ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
@@ -225,7 +243,7 @@ define PYTHON3_REMOVE_PY_FILES
 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
 		xargs -0 --no-run-if-empty rm -f
 endef
-TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
 endif
 
 # Normally, *.pyc files should not have been compiled, but just in
@@ -235,16 +253,14 @@ define PYTHON3_REMOVE_PYC_FILES
 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
 		xargs -0 --no-run-if-empty rm -f
 endef
-TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
 endif
 
 # In all cases, we don't want to keep the optimized .opt-1.pyc and
 # .opt-2.pyc files, since they can't work without their non-optimized
 # variant.
-ifeq ($(BR2_PACKAGE_PYTHON3),y)
 define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | \
 		xargs -0 --no-run-if-empty rm -f
 endef
-TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
-endif
+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES

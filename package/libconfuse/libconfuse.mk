@@ -10,8 +10,13 @@ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIB
 LIBCONFUSE_INSTALL_STAGING = YES
 LIBCONFUSE_CONF_OPTS = --disable-rpath
 LIBCONFUSE_DEPENDENCIES = host-flex
+HOST_LIBCONFUSE_DEPENDENCIES = host-flex
 LIBCONFUSE_LICENSE = ISC
 LIBCONFUSE_LICENSE_FILES = LICENSE
+
+ifeq ($(BR2_PACKAGE_GETTEXT),y)
+LIBCONFUSE_DEPENDENCIES += gettext
+endif
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
