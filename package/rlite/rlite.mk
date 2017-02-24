@@ -20,5 +20,15 @@ RLITE_CONF_OPTS = -DCMAKE_INSTALL_PREFIX="/" -DMAC2IFNAME=ON
 
 RLITE_MODULE_SUBDIRS = kernel
 
+# Invoke the rlite ./configure script to generate kernel
+# Makefile and symbolic links
+define RLITE_DO_CONFIGURE
+	echo "Preliminary configure to generate some files ..."
+	cd $(@D) && ./configure
+	echo "... done!"
+endef
+
+RLITE_PRE_CONFIGURE_HOOKS += RLITE_DO_CONFIGURE
+
 $(eval $(kernel-module))
 $(eval $(cmake-package))
