@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# This script updates the rlite image and copy it to
+# the demo/buildroot directory in your repository.
+#
+# By default, rlite code to include in the image is
+# taken from github. If you want to use the code of
+# your local git tree, open package/rlite/rlite.mk
+# and use the following configuration:
+#
+#   RLITE_SITE_METHOD = local
+#   RLITE_SITE = /path/to/your/rlite/repo/
 
 if [[ ! -f .config ]]; then
     cp RLITE_BUILDROOT_CONFIG .config

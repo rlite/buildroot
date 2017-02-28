@@ -4,10 +4,14 @@
 #
 #############################################################
 RLITE_VERSION = master
-RLITE_SITE = https://github.com/vmaffione/rlite.git
+
 RLITE_SITE_METHOD = git
-#RLITE_SITE = /home/vmaffione/git/rlite
+RLITE_SITE = https://github.com/vmaffione/rlite.git
+# Uncomment the following two and comment the two above to
+# build the image with the rlite code in your local git tree
 #RLITE_SITE_METHOD = local
+#RLITE_SITE = /home/vmaffione/git/rlite
+
 # e.g. useful for patched dropbear
 RLITE_INSTALL_STAGING = YES
 RLITE_INSTALL_TARGET = YES
