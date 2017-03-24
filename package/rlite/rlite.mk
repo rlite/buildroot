@@ -13,7 +13,7 @@ RLITE_INSTALL_STAGING = YES
 RLITE_INSTALL_TARGET = YES
 RLITE_LICENSE = GPLv2
 
-RLITE_DEPENDENCIES = protobuf
+RLITE_DEPENDENCIES = protobuf host-swig
 # For some reason buildroot uses "/usr" as default install prefix,
 # so we have to override it
 RLITE_CONF_OPTS = -DCMAKE_INSTALL_PREFIX="/" -DMAC2IFNAME=ON
