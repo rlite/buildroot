@@ -11,7 +11,7 @@ ORACLE_MYSQL_SITE = http://dev.mysql.com/get/Downloads/MySQL-$(ORACLE_MYSQL_VERS
 ORACLE_MYSQL_INSTALL_STAGING = YES
 ORACLE_MYSQL_DEPENDENCIES = readline ncurses
 ORACLE_MYSQL_AUTORECONF = YES
-ORACLE_MYSQL_LICENSE = GPLv2
+ORACLE_MYSQL_LICENSE = GPL-2.0
 ORACLE_MYSQL_LICENSE_FILES = README COPYING
 ORACLE_MYSQL_PROVIDES = mysql
 
@@ -108,12 +108,12 @@ endef
 ORACLE_MYSQL_POST_INSTALL_TARGET_HOOKS += ORACLE_MYSQL_ADD_FOLDER
 
 define ORACLE_MYSQL_INSTALL_INIT_SYSV
-	$(INSTALL) -D -m 0755 package/oracle-mysql/S97mysqld \
+	$(INSTALL) -D -m 0755 $(ORACLE_MYSQL_PKGDIR)/S97mysqld \
 		$(TARGET_DIR)/etc/init.d/S97mysqld
 endef
 
 define ORACLE_MYSQL_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 644 package/mysql/mysqld.service \
+	$(INSTALL) -D -m 644 $(ORACLE_MYSQL_PKGDIR)/mysqld.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 	ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
@@ -124,7 +124,6 @@ else
 ORACLE_MYSQL_CONF_OPTS += \
 	--without-server
 endif
-
 
 define ORACLE_MYSQL_REMOVE_TEST_PROGS
 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench

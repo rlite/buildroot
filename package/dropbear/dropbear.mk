@@ -5,9 +5,9 @@
 ################################################################################
 
 DROPBEAR_VERSION = master
-DROPBEAR_SITE = https://gitlab.com/rlite/rlite-dropbear.git
+DROPBEAR_SITE = https://github.com/vmaffione/rina-dropbear.git
 DROPBEAR_SITE_METHOD = git
-DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
 DROPBEAR_LICENSE_FILES = LICENSE
 DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
 DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
