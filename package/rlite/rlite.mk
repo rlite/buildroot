@@ -24,11 +24,13 @@ RLITE_CONF_OPTS = -DCMAKE_INSTALL_PREFIX="/" -DMAC2IFNAME=ON
 
 RLITE_MODULE_SUBDIRS = kernel
 
-# Invoke the rlite ./configure script to generate kernel
-# Makefile and symbolic links
+# Invoke the rlite ./configure script to generate kernel Makefile and
+# symbolic links. Use the --kernbuilddir option to allow kernel probing
+# tests to be run on the buildroot kernel (tough with the host native
+# compiler).
 define RLITE_DO_CONFIGURE
 	echo "Preliminary configure to generate some files ..."
-	cd $(@D) && ./configure
+	cd $(@D) && ./configure --kernbuilddir $(LINUX_DIR)
 	echo "... done!"
 endef
 
