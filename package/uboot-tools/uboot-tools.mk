@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-UBOOT_TOOLS_VERSION = 2017.03
+UBOOT_TOOLS_VERSION = 2017.05
 UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
 UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
 UBOOT_TOOLS_LICENSE = GPL-2.0+
@@ -67,9 +67,6 @@ define UBOOT_TOOLS_INSTALL_DUMPIMAGE
 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(TARGET_DIR)/usr/sbin/dumpimage
 endef
 endif
-
-define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
-endef
 
 define UBOOT_TOOLS_INSTALL_STAGING_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a

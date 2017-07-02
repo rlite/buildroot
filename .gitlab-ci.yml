@@ -34,6 +34,13 @@ check-gitlab-ci.yml:
         - make .gitlab-ci.yml
         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
 
+check-DEVELOPERS:
+    # get-developers should print just "No action specified"; if it prints
+    # anything else, it's a parse error.
+    # The initial ! is removed by YAML so we need to quote it.
+    script:
+        - "! utils/get-developers | grep -v 'No action specified'"
+
 .defconfig: &defconfig
     # Running the defconfigs for every push is too much, so limit to
     # explicit triggers through the API.
@@ -89,6 +96,10 @@ ci20_defconfig: *defconfig
 ci40_defconfig: *defconfig
 csky_gx6605s_defconfig: *defconfig
 cubieboard2_defconfig: *defconfig
+engicam_imx6qdl_icore_defconfig: *defconfig
+engicam_imx6qdl_icore_rqs_defconfig: *defconfig
+engicam_imx6ul_geam_defconfig: *defconfig
+engicam_imx6ul_isiot_defconfig: *defconfig
 firefly_rk3288_defconfig: *defconfig
 firefly_rk3288_demo_defconfig: *defconfig
 freescale_imx28evk_defconfig: *defconfig
@@ -126,6 +137,7 @@ nitrogen6sx_defconfig: *defconfig
 nitrogen6x_defconfig: *defconfig
 nitrogen7_defconfig: *defconfig
 odroidc2_defconfig: *defconfig
+olimex_a13_olinuxino_defconfig: *defconfig
 olimex_a20_olinuxino_lime2_defconfig: *defconfig
 olimex_a20_olinuxino_lime_defconfig: *defconfig
 olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
@@ -134,6 +146,8 @@ olimex_imx233_olinuxino_defconfig: *defconfig
 openblocks_a6_defconfig: *defconfig
 orangepi_one_defconfig: *defconfig
 orangepi_pc_defconfig: *defconfig
+orangepi_plus_defconfig: *defconfig
+orangepi_zero_defconfig: *defconfig
 pandaboard_defconfig: *defconfig
 pc_x86_64_bios_defconfig: *defconfig
 pc_x86_64_efi_defconfig: *defconfig

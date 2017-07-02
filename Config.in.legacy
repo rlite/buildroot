@@ -143,6 +143,110 @@ comment "----------------------------------------------------"
 endif
 
 ###############################################################################
+comment "Legacy options removed in 2017.08"
+
+config BR2_STRIP_none
+	bool "Strip command 'none' has been removed"
+	select BR2_LEGACY
+	help
+	  The strip command choice has been changed into a single
+	  boolean option. Please check that the new setting is
+	  correct (in the "Build options" sub-menu)
+
+config BR2_PACKAGE_BEECRYPT_CPP
+	bool "C++ support removed in beecrypt"
+	select BR2_LEGACY
+	help
+	  Support for C++ depends on icu. The beecrypt package is
+	  incompatible with icu 59+.
+
+config BR2_PACKAGE_SPICE_CLIENT
+	bool "spice client support removed"
+	select BR2_LEGACY
+	help
+	  Spice client support has been removed upstream. The
+	  functionality now lives in the spice-gtk widget and
+	  virt-viewer.
+
+config BR2_PACKAGE_SPICE_GUI
+	bool "spice gui support removed"
+	select BR2_LEGACY
+	help
+	  Spice gui support has been removed upstream. The
+	  functionality now lives in the spice-gtk widget and
+	  virt-viewer.
+
+config BR2_PACKAGE_SPICE_TUNNEL
+	bool "spice network redirection removed"
+	select BR2_LEGACY
+	help
+	  Spice network redirection, aka tunnelling has been removed
+	  upstream.
+
+config BR2_PACKAGE_INPUT_TOOLS
+	bool "input-tools removed"
+	select BR2_LEGACY
+	select BR2_PACKAGE_LINUXCONSOLETOOLS
+	help
+	  input-tools has been removed, it is replaced by
+	  linuxconsoletools, which has automatically been enabled.
+
+config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+	bool "inputattach moved to linuxconsoletools"
+	select BR2_LEGACY
+	select BR2_PACKAGE_LINUXCONSOLETOOLS
+	select BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
+	help
+	  input-tools has been removed, inputattach is now part
+	  of linuxconsoletools, which has automatically been
+	  enabled.
+
+config BR2_PACKAGE_INPUT_TOOLS_JSCAL
+	bool "jscal moved to linuxconsoletools"
+	select BR2_LEGACY
+	select BR2_PACKAGE_LINUXCONSOLETOOLS
+	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+	help
+	  input-tools has been removed, jscal is now part
+	  of linuxconsoletools, which has automatically been
+	  enabled.
+
+config BR2_PACKAGE_INPUT_TOOLS_JSTEST
+	bool "jstest moved to linuxconsoletools"
+	select BR2_LEGACY
+	select BR2_PACKAGE_LINUXCONSOLETOOLS
+	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+	help
+	  input-tools has been removed, jstest is now part
+	  of linuxconsoletools, which has automatically been
+	  enabled.
+
+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+	bool "SH Sourcery toolchain has been removed"
+	select BR2_LEGACY
+	help
+	  The Sourcery CodeBench toolchain for the sh architecture has
+	  been removed, since it uses glibc older than 2.17 that requires
+	  -lrt to link executables using clock_* system calls. This makes
+	  this toolchain difficult to maintain over time.
+
+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+	bool "x86 Sourcery toolchain has been removed"
+	select BR2_LEGACY
+	help
+	  The Sourcery CodeBench toolchain for the x86 architecture has
+	  been removed, since it uses glibc older than 2.17 that requires
+	  -lrt to link executables using clock_* system calls. This makes
+	  this toolchain difficult to maintain over time.
+
+config BR2_GCC_VERSION_4_8_X
+	bool "gcc 4.8.x support removed"
+	select BR2_LEGACY
+	help
+	  Support for gcc version 4.8.x has been removed. The current
+	  default version (5.x or later) has been selected instead.
+
+###############################################################################
 comment "Legacy options removed in 2017.05"
 
 config BR2_PACKAGE_SUNXI_MALI_R2P4
