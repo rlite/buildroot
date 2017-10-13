@@ -143,7 +143,231 @@ comment "----------------------------------------------------"
 endif
 
 ###############################################################################
+comment "Legacy options removed in 2017.11"
+
+config BR2_PACKAGE_OPENOBEX_BLUEZ
+	bool "openobex bluez option removed"
+	select BR2_LEGACY
+	select BR2_PACKAGE_BLUEZ_UTILS
+	help
+	  The OpenOBEX package no longer offers an option to enable or
+	  disable BlueZ support. Instead, BlueZ support is always
+	  included when the bluez5_utils or bluez_utils package is
+	  selected.
+
+config BR2_PACKAGE_OPENOBEX_LIBUSB
+	bool "openobex libusb option removed"
+	select BR2_LEGACY
+	select BR2_PACKAGE_LIBUSB
+	help
+	  The OpenOBEX package no longer offers an option to enable or
+	  disable libusb support. Instead, USB support is always
+	  included when the libusb package is selected.
+
+config BR2_PACKAGE_OPENOBEX_APPS
+	bool "openobex apps option removed"
+	select BR2_LEGACY
+	help
+	  The OpenOBEX package no longer offers an option to enable or
+	  disable apps support.
+
+config BR2_PACKAGE_OPENOBEX_SYSLOG
+	bool "openobex syslog option removed"
+	select BR2_LEGACY
+	help
+	  The OpenOBEX package no longer offers an option to enable or
+	  disable syslog support.
+
+config BR2_PACKAGE_OPENOBEX_DUMP
+	bool "openobex dump option removed"
+	select BR2_LEGACY
+	help
+	  The OpenOBEX package no longer offers an option to enable or
+	  disable dump support.
+
+config BR2_PACKAGE_AICCU
+	bool "aiccu utility removed"
+	select BR2_LEGACY
+	help
+	  As the SixXS project has ceased its operation on 2017-06-06,
+	  the AICCU utility has no use anymore and has been removed.
+
+	  https://www.sixxs.net/sunset/
+
+config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+	bool "util-linux login utilities option removed"
+	select BR2_LEGACY
+	select BR2_PACKAGE_UTIL_LINUX_LAST
+	select BR2_PACKAGE_UTIL_LINUX_LOGIN
+	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
+	select BR2_PACKAGE_UTIL_LINUX_SU
+	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
+	help
+	  Login utilities (last, login, runuser, su, sulogin) now have
+	  their own configuration options in the util-linux menu.
+
+###############################################################################
 comment "Legacy options removed in 2017.08"
+
+config BR2_TARGET_GRUB
+	bool "grub (aka grub-legacy) has been removed"
+	select BR2_LEGACY
+	help
+	  grub-legacy is no longer maintained, and no longer builds with
+	  recent binutils versions.
+
+	  Use grub2 or syslinux instead.
+
+config BR2_PACKAGE_SIMICSFS
+	bool "simicsfs support removed"
+	select BR2_LEGACY
+	help
+	  Support for simicsfs kernel driver that provides access to a
+	  host computer's local filesystem when the target is
+	  executing within a SIMICS simulation has been removed.
+
+	  Simics is now moving away from the simicsfs kernel module,
+	  as the kernel module has required too much maintenance
+	  work. Users should move to the user mode Simics agent
+	  instead.
+
+config BR2_BINUTILS_VERSION_2_26_X
+	bool "binutils version 2.26 support removed"
+	select BR2_LEGACY
+	help
+	  Support for binutils version 2.26 has been removed. The
+	  current default version (2.28 or later) has been selected
+	  instead.
+
+config BR2_XTENSA_OVERLAY_DIR
+	string "The BR2_XTENSA_OVERLAY_DIR option has been removed"
+	help
+	  The BR2_XTENSA_OVERLAY_DIR has been removed in favour of
+	  BR2_XTENSA_OVERLAY_FILE. You must now pass the complete
+	  path to the overlay file, not to the directory containing
+	  it.
+
+config BR2_XTENSA_OVERLAY_DIR_WRAP
+	bool
+	default y if BR2_XTENSA_OVERLAY_DIR != ""
+	select BR2_LEGACY
+
+config BR2_XTENSA_CUSTOM_NAME
+	string "The BR2_XTENSA_CUSTOM_NAME option has been removed"
+	help
+	  The BR2_XTENSA_CUSTOM_NAME option has been removed.
+
+config BR2_XTENSA_CUSTOM_NAME_WRAP
+	bool
+	default y if BR2_XTENSA_CUSTOM_NAME != ""
+	select BR2_LEGACY
+
+config BR2_PACKAGE_HOST_MKE2IMG
+	bool "host mke2img has been removed"
+	select BR2_LEGACY
+	help
+	  We now call mkfs directly to generate ext2/3/4 filesystem
+	  image, so mke2img is no longer necessary.
+
+config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+	int "exact size in blocks has been removed"
+	default 0
+	help
+	  This option has been removed in favor of
+	  BR2_TARGET_ROOTFS_EXT2_SIZE. It has been set automatically
+	  to the value you had before. Set to 0 here to remove the
+	  warning.
+
+config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
+	bool
+	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 && \
+		BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
+	select BR2_LEGACY
+
+# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still referenced in fs/ext2/Config.in
+
+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+	default 0
+	help
+	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4
+	  images. It now automatically selects the number of inodes
+	  based on the image size. The extra number of inodes can no
+	  longer be provided; instead, provide the total number of
+	  inodes needed in BR2_TARGET_ROOTFS_EXT2_INODES.
+
+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
+	bool
+	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE
+	bool "cdxaparse removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DATAURISRC
+	bool "dataurisrc moved to gstreamer1"
+	select BR2_LEGACY
+	help
+	  Dataurisrc has moved to gstreamer core and is always built.
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DCCP
+	bool "dccp removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HDVPARSE
+	bool "hdvparse removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MVE
+	bool "mve removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX
+	bool "nuvdemux removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PATCHDETECT
+	bool "patchdetect removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
+	bool "sdi removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA
+	bool "tta removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE
+	bool "videomeasure removed"
+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
+	select BR2_LEGACY
+	help
+	  videomeasure plugin has been removed and has been replaced by
+	  iqa, which has automatically been enabled.
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
+	bool "apexsink removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
+	bool "sdl removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+	bool "mad (*.mp3 audio) removed"
+	select BR2_LEGACY
+
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
+	select BR2_LEGACY
+	help
+	  The WebRTC plugin in GStreamer 1.x has always been named
+	  webrtcdsp, but was wrongly introduced in Buildroot under the
+	  name webrtc. Therefore, we have renamed the option to match
+	  the actual name of the GStreamer plugin.
 
 config BR2_STRIP_none
 	bool "Strip command 'none' has been removed"
@@ -293,6 +517,7 @@ config BR2_PACKAGE_OPENOCD_FT2XXX
 config BR2_PACKAGE_KODI_RTMPDUMP
 	bool "kodi rtmp has been removed"
 	select BR2_LEGACY
+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
 	help
 	  Internal rtmp support was removed from Kodi.
 
