@@ -1,0 +1,13 @@
+config BR2_PACKAGE_OUROBOROS
+        bool "ouroboros"
+        depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+        depends on !BR2_STATIC_LIBS
+        select BR2_PACKAGE_LIBGCRYPT
+        select BR2_PACKAGE_PROTOBUF_C
+        select BR2_PACKAGE_LIBFUSE
+        help
+          Ouroboros
+          https://ouroboros.ilabt.imec.be/
+
+comment "libaacs needs a toolchain w/ dynamic library"
+        depends on BR2_STATIC_LIBS
