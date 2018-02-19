@@ -1,0 +1,16 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,8 +4,12 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+ 
+ project(ouroboros C)
+ 
+-include(GitVersionGen)
+-git_version_gen()
++#include(GitVersionGen)
++#git_version_gen()
++
++set(PACKAGE_VERSION_MAJOR 0)
++set(PACKAGE_VERSION_MINOR 10)
++set(PACKAGE_VERSION_PATCH 0)
+ 
+ include(GNUInstallDirs)
