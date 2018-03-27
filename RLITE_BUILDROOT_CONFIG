@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2017.11-git-02296-gdd1aedd784-dirty Configuration
+# Buildroot 2017.11-git-02297-g657d025264 Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_5=y
@@ -1668,7 +1668,7 @@ BR2_PACKAGE_LIBNL=y
 # BR2_PACKAGE_LIBOAUTH is not set
 # BR2_PACKAGE_LIBOPING is not set
 # BR2_PACKAGE_LIBOSIP2 is not set
-# BR2_PACKAGE_LIBPCAP is not set
+BR2_PACKAGE_LIBPCAP=y
 # BR2_PACKAGE_LIBPJSIP is not set
 # BR2_PACKAGE_LIBRSYNC is not set
 # BR2_PACKAGE_LIBSHAIRPLAY is not set
@@ -1703,7 +1703,6 @@ BR2_PACKAGE_LIBNL=y
 # openzwave needs udev and a toolchain w/ C++, threads, wchar
 #
 # BR2_PACKAGE_ORTP is not set
-# BR2_PACKAGE_OUROBOROS is not set
 # BR2_PACKAGE_PAHO_MQTT_C is not set
 # BR2_PACKAGE_QDECODER is not set
 # BR2_PACKAGE_QPID_PROTON is not set
@@ -2004,7 +2003,7 @@ BR2_PACKAGE_IFUPDOWN_SCRIPTS=y
 # BR2_PACKAGE_IODINE is not set
 # BR2_PACKAGE_IPERF is not set
 # BR2_PACKAGE_IPERF3 is not set
-# BR2_PACKAGE_IPROUTE2 is not set
+BR2_PACKAGE_IPROUTE2=y
 # BR2_PACKAGE_IPSEC_TOOLS is not set
 # BR2_PACKAGE_IPSET is not set
 # BR2_PACKAGE_IPTABLES is not set
@@ -2123,7 +2122,8 @@ BR2_PACKAGE_OPENSSH=y
 # BR2_PACKAGE_SSLH is not set
 # BR2_PACKAGE_STRONGSWAN is not set
 # BR2_PACKAGE_STUNNEL is not set
-# BR2_PACKAGE_TCPDUMP is not set
+BR2_PACKAGE_TCPDUMP=y
+# BR2_PACKAGE_TCPDUMP_SMB is not set
 # BR2_PACKAGE_TCPING is not set
 # BR2_PACKAGE_TCPREPLAY is not set
 # BR2_PACKAGE_THTTPD is not set
